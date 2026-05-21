@@ -4,7 +4,7 @@ import os
 FILENAME = "books.json"
 
 def load_books():
-    """Эта функция читает книги из файла books.json."""
+    """Загружает список книг из JSON-файла."""
     if not os.path.exists(FILENAME):
         return []
     try:
@@ -14,12 +14,42 @@ def load_books():
         return []
 
 def save_books(books):
-    """Эта функция записывает изменения в файл books.json."""
+    """Сохраняет список книг в JSON-файл."""
     with open(FILENAME, "w", encoding="utf-8") as f:
         json.dump(books, f, ensure_ascii=False, indent=4)
 
+def add_book():
+    """Запрашивает данные о книге у пользователя и сохраняет в файл."""
+    books = load_books()
+    
+    print("\n--- Добавление новой книги ---")
+    author = input("Введите автора книги: ").strip()
+    title = input("Введите название книги: ").strip()
+    
+
+    while True:
+        try:
+            rating = int(input("Введите вашу оценку (от 1 до 5): "))
+            if 1 <= rating <= 5:
+                break
+            print("Ошибка: Оценка должна быть в диапазоне от 1 до 5.")
+        except ValueError:
+            print("Ошибка: Пожалуйста, введите целое число.")
+            
+    date_read = input("Введите дату прочтения (например, ГГГГ-ММ-ДД): ").strip()
+    
+    new_book = {
+        "author": author,
+        "title": title,
+        "rating": rating,
+        "date_read": date_read
+    }
+    
+    books.append(new_book)
+    save_books(books)
+    print(f"\nУспех! Книга «{title}» сохранена.")
+
 def main():
-    """Главный цикл программы, который показывает меню."""
     while True:
         print("\n--- ТРЕКЕР ПРОЧИТАННЫХ КНИГ ---")
         print("1. Добавить книгу")
@@ -32,7 +62,7 @@ def main():
         choice = input("\nВыберите действие (1-6): ").strip()
         
         if choice == "1":
-            print("\n[В разработке] Добавление книги...")
+            add_book()  
         elif choice == "2":
             print("\n[В разработке] Просмотр всех книг...")
         elif choice == "3":
@@ -43,7 +73,7 @@ def main():
             print("\n[В разработке] Удаление книги...")
         elif choice == "6":
             print("\nВыход из программы. До свидания!")
-            break 
+            break
         else:
             print("\nНекорректный ввод. Пожалуйста, выберите пункт от 1 до 6.")
 
