@@ -26,7 +26,6 @@ def add_book():
     author = input("Введите автора книги: ").strip()
     title = input("Введите название книги: ").strip()
     
-
     while True:
         try:
             rating = int(input("Введите вашу оценку (от 1 до 5): "))
@@ -87,6 +86,32 @@ def show_author_stats():
     for author, count in stats.items():
         print(f"Автор: {author} — Прочитано книг: {count}")
 
+def delete_book():
+    """Удаляет книгу из списка по ее порядковому номеру."""
+    books = load_books()
+    if not books:
+        print("\nСписок книг пуст, удалять нечего.")
+        return
+        
+    list_books()
+    
+    while True:
+        try:
+            choice = input("\nВведите номер книги для удаления (или '0' для отмены): ").strip()
+            if choice == '0':
+                print("Удаление отменено.")
+                return
+                
+            idx = int(choice)
+            if 1 <= idx <= len(books):
+                removed = books.pop(idx - 1)
+                save_books(books)
+                print(f"\nУспех! Книга «{removed['title']}» удалена.")
+                break
+            print(f"Ошибка: Введите число от 1 до {len(books)}.")
+        except ValueError:
+            print("Ошибка: Пожалуйста, введите корректный номер.")
+
 def main():
     while True:
         print("\n--- ТРЕКЕР ПРОЧИТАННЫХ КНИГ ---")
@@ -100,22 +125,15 @@ def main():
         choice = input("\nВыберите действие (1-6): ").strip()
         
         if choice == "1":
-            add_book()  
-        elif choice == "2":
-            print("\n[В разработке] Просмотр всех книг...")
-        elif choice == "3":
-            print("\n[В разработке] Просмотр средней оценки...")
-        elif choice == "4":
-            print("\n[В разработке] Просмотр статистики по авторам...")
             add_book()
         elif choice == "2":
-            list_books()      
+            list_books()
         elif choice == "3":
-            show_average_rating() 
+            show_average_rating()
         elif choice == "4":
-            show_author_stats()   
+            show_author_stats()
         elif choice == "5":
-            print("\n[В разработке] Удаление книги...")
+            delete_book()
         elif choice == "6":
             print("\nВыход из программы. До свидания!")
             break
