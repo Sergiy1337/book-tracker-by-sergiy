@@ -49,6 +49,44 @@ def add_book():
     save_books(books)
     print(f"\nУспех! Книга «{title}» сохранена.")
 
+def list_books():
+    """Выводит список всех сохраненных книг."""
+    books = load_books()
+    if not books:
+        print("\nВаш трекер пуст. Самое время добавить первую книгу!")
+        return
+        
+    print("\n--- Список прочитанных книг ---")
+    for idx, book in enumerate(books, 1):
+        print(f"{idx}. «{book['title']}» — {book['author']} | Оценка: {book['rating']}/5 | Дата: {book['date_read']}")
+
+def show_average_rating():
+    """Рассчитывает и выводит среднюю оценку по всем книгам."""
+    books = load_books()
+    if not books:
+        print("\nНет данных для расчета средней оценки.")
+        return
+        
+    total_rating = sum(book['rating'] for book in books)
+    avg_rating = total_rating / len(books)
+    print(f"\nСредняя оценка ваших книг: {avg_rating:.2f} из 5")
+
+def show_author_stats():
+    """Выводит количество прочитанных книг по каждому автору."""
+    books = load_books()
+    if not books:
+        print("\nНет данных для расчета статистики.")
+        return
+        
+    stats = {}
+    for book in books:
+        author = book['author']
+        stats[author] = stats.get(author, 0) + 1
+        
+    print("\n--- Статистика по авторам ---")
+    for author, count in stats.items():
+        print(f"Автор: {author} — Прочитано книг: {count}")
+
 def main():
     while True:
         print("\n--- ТРЕКЕР ПРОЧИТАННЫХ КНИГ ---")
@@ -69,6 +107,13 @@ def main():
             print("\n[В разработке] Просмотр средней оценки...")
         elif choice == "4":
             print("\n[В разработке] Просмотр статистики по авторам...")
+            add_book()
+        elif choice == "2":
+            list_books()      
+        elif choice == "3":
+            show_average_rating() 
+        elif choice == "4":
+            show_author_stats()   
         elif choice == "5":
             print("\n[В разработке] Удаление книги...")
         elif choice == "6":
